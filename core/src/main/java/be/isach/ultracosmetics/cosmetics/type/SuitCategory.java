@@ -77,10 +77,10 @@ public enum SuitCategory {
     }
 
     public void initializeSuitParts() {
-        this.helmet = new SuitType(helmetType, ArmorSlot.HELMET, this);
-        this.chestplate = new SuitType(chestplateType, ArmorSlot.CHESTPLATE, this);
-        this.leggings = new SuitType(leggingsType, ArmorSlot.LEGGINGS, this);
-        this.boots = new SuitType(bootsType, ArmorSlot.BOOTS, this);
+        this.helmet = new SuitType(helmetType, ArmorSlot.HELMET, this,false);
+        this.chestplate = new SuitType(chestplateType, ArmorSlot.CHESTPLATE, this,false);
+        this.leggings = new SuitType(leggingsType, ArmorSlot.LEGGINGS, this,false);
+        this.boots = new SuitType(bootsType, ArmorSlot.BOOTS, this,false);
         if (CosmeticType.GENERATE_MISSING_MESSAGES) {
             MessageManager.addMessage(getConfigPath() + ".whole-equip", "&f&lwhole " + configName + " &f&lsuit");
             MessageManager.addMessage(getConfigPath() + ".helmet-name", configName + " &f&Helmet");

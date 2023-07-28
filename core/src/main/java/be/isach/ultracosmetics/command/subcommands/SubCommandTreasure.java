@@ -6,7 +6,6 @@ import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.treasurechests.TreasureLocation;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.version.VersionManager;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -69,7 +68,7 @@ public class SubCommandTreasure extends SubCommand {
         // form: /uc treasure (player)
         if (args.length < 3) {
             if (!checkWorld(sender, opener.getWorld())) return;
-            ultraCosmetics.getTreasureChestManager().tryOpenChest(opener);
+           // ultraCosmetics.getTreasureChestManager().tryOpenChest(opener);
             return;
         }
 
@@ -129,7 +128,7 @@ public class SubCommandTreasure extends SubCommand {
             return;
         }
 
-        ultraCosmetics.getTreasureChestManager().tryOpenChest(opener, TreasureLocation.fromLocation(location));
+        //ultraCosmetics.getTreasureChestManager().tryOpenChest(opener, TreasureLocation.fromLocation(location));
     }
 
     private boolean checkWorld(CommandSender sender, World world) {

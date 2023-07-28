@@ -13,8 +13,8 @@ public abstract class EntityCosmetic<T extends CosmeticEntType<?>,E extends Enti
      */
     protected E entity;
 
-    public EntityCosmetic(UltraPlayer owner, T type, UltraCosmetics ultraCosmetics) {
-        super(owner, type, ultraCosmetics);
+    public EntityCosmetic(UltraPlayer owner, T type, UltraCosmetics ultraCosmetics,boolean special) {
+        super(owner, type, ultraCosmetics,special);
     }
 
     public E getEntity() {

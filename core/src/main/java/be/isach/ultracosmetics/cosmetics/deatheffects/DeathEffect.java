@@ -12,7 +12,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 public abstract class DeathEffect extends Cosmetic<DeathEffectType> {
 
     public DeathEffect(UltraPlayer owner, DeathEffectType type, UltraCosmetics ultraCosmetics) {
-        super(owner, type, ultraCosmetics);
+        super(owner, type, ultraCosmetics,false);
     }
 
     @Override

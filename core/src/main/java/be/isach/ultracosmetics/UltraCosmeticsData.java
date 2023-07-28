@@ -114,8 +114,7 @@ public class UltraCosmeticsData {
      * Check Treasure Chests requirements.
      */
     protected void checkTreasureChests() {
-        moneyTreasureLoot = ultraCosmetics.getEconomyHandler().isUsingEconomy()
-                && SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Money.Enabled");
+        moneyTreasureLoot = true;
         treasureChests = SettingsManager.getConfig().getBoolean("TreasureChests.Enabled");
     }
 

@@ -130,6 +130,13 @@ Menu:
       Lore: '<gray>Unlocked: </gray><white><unlocked>'
       Tooltip-Equip: <bold><aqua>Equip
       Tooltip-Unequip: <bold><red>Unequip
+  Special:
+    Title: <bold>Special
+    Button:
+      Name: <bold><red>Death Effects
+      Lore: '<gray>Unlocked: </gray><white><unlocked>'
+      Tooltip-Equip: <bold><aqua>Equip
+      Tooltip-Unequip: <bold><red>Unequip
   Buy-Ammo:
     Title: <bold>Buy Ammo
   Misc:
@@ -186,7 +193,7 @@ Treasure-Chests-Loot:
     <cosmetic>
 Treasure-Chests-Loot-Messages:
   Ammo: <prefix> <bold><gold><name> found <ammo> <cosmetic> ammo
-  Money: <prefix> <bold><gold><name> found $<money>
+  Money: <prefix> <bold><gold><name> found <money> Coins
   Pets: <prefix> <bold><gold><name> found rare <cosmetic>
   Mounts: <prefix> <bold><gold><name> found rare <cosmetic>
   Particle-Effects: <prefix> <bold><gold><name> found legendary <cosmetic>

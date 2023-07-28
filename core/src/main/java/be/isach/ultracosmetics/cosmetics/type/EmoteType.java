@@ -26,7 +26,7 @@ public class EmoteType extends CosmeticType<Emote> {
     public static void register() {
 
         /* CRY BEGIN */
-        EmoteType CRY = new EmoteType("Cry", 1);
+        EmoteType CRY = new EmoteType("Cry", 1,false);
         CRY.appendTexture("d6a4b88a297c78f9dd53ee8c7164dda0ded7e988382555bc7d89c901922b32e");
         CRY.appendTexture("196b8e272c54a422d9df36d85caff26624c733e7b3f6040d3e4c9cd6e");
         CRY.appendTexture("dec9aa9b3f46195ae9c7fea7c61148764a41e0d68dae41e82868d792b3c");
@@ -61,7 +61,7 @@ public class EmoteType extends CosmeticType<Emote> {
         /* CRY END */
 
         /* ANGRY BEGIN */
-        EmoteType ANGRY = new EmoteType("Angry", 1);
+        EmoteType ANGRY = new EmoteType("Angry", 1,false);
         ANGRY.appendTexture("7d41407363bcb46837538a63fdf7055278d42dc4aac639ed5794533bbd770");
         ANGRY.appendTexture("47bbf6d9f4c57556eef816c50eb75f9d158f53954957aabe6c2e14ffa6c90");
         ANGRY.appendTexture("a750127f1c3c71f6a5f5e9917a825e9235e1959b258ff29b6ff9771cb44");
@@ -79,7 +79,7 @@ public class EmoteType extends CosmeticType<Emote> {
         /* ANGRY END */
 
         /* HAPPY BEGIN */
-        EmoteType HAPPY = new EmoteType("Happy", 1);
+        EmoteType HAPPY = new EmoteType("Happy", 1,false);
         HAPPY.appendTexture("ef66c7485ccb853a6538122e45c8a4821fbe097f96a6060feb981f7a2bba890");
         HAPPY.appendTexture("a5d43eb0ec5f6de1d469b69680978a6dd7117772ee0d82ffdf08749e84df7ed");
         HAPPY.appendTexture("473e72cc371de25f3305665769dd7e9ff1161695252e799612580deeedd3", 7);
@@ -88,7 +88,7 @@ public class EmoteType extends CosmeticType<Emote> {
         /* HAPPY END */
 
         /* CHEEKY BEGIN */
-        EmoteType CHEEKY = new EmoteType("Cheeky", 1);
+        EmoteType CHEEKY = new EmoteType("Cheeky", 1,false);
         CHEEKY.appendTexture("319ec094258842725e41f985346a7f824af6fc6cf13fbe949c9c465a30bc99", 4);
         CHEEKY.appendTexture("b7d533e65f2cae97afe334c81ecc97e2fa5b3e5d3ecf8b91bc39a5adb2e79a");
         CHEEKY.appendTexture("35a46f8334e49d273384eb72b2ac15e24a640d7648e4b28c348efce93dc97ab");
@@ -108,7 +108,7 @@ public class EmoteType extends CosmeticType<Emote> {
         /* CHEEKY END */
 
         /* LOVE BEGIN */
-        EmoteType LOVE = new EmoteType("Love", 2);
+        EmoteType LOVE = new EmoteType("Love", 2,false);
         LOVE.appendTexture("a080c9bfc64aeb5aed2acaa885d6fcbbd5e5ddf468956d3f1b1e455774d48893");
         LOVE.appendTexture("a4d678bb120fbd3beacaf36bdb117766a63d7c2d96a6e85a8ef5a2b13e166");
         LOVE.appendTexture("42737e99e4c0596a3712e7711baecae8d1ddb774ac1cf531896862380753e16");
@@ -122,7 +122,7 @@ public class EmoteType extends CosmeticType<Emote> {
         /* LOVE END */
 
         /* DEAL WITH IT BEGIN */
-        EmoteType DEAL_WITH_IT = new EmoteType("DealWithIt", 3);
+        EmoteType DEAL_WITH_IT = new EmoteType("DealWithIt", 3,false);
         DEAL_WITH_IT.appendTexture("72bb8ba79648718fe80687ed4df2b9e284e732583e05658e227efd7fdf80f4");
         DEAL_WITH_IT.appendTexture("29b5b1f2c92a1283456f608b29ec3617191aba2bd31bd4b4b08e6cba6806227");
         DEAL_WITH_IT.appendTexture("7959ef5fabb3f83fb19bba6ca67bb97758eec60235cf46e71d834b237337c4");
@@ -132,7 +132,7 @@ public class EmoteType extends CosmeticType<Emote> {
         /* DEAL WITH IT END */
 
         /* COOL BEGIN */
-        EmoteType COOL = new EmoteType("Cool", 2);
+        EmoteType COOL = new EmoteType("Cool", 2,false);
         COOL.appendTexture("a21e6dbfd74a1859ddbae3380fc1ab71f2389745945fc92329b164635bd14f");
         COOL.appendTexture("3733db9a94bfe15cdbb7ca5832c85cfada98ad2c839934766bdc41f977b5c163");
         COOL.appendTexture("766b3eef3c726ecb816c43839189eeb8e36382e3e5fe41128372785185a322", 4);
@@ -140,7 +140,7 @@ public class EmoteType extends CosmeticType<Emote> {
         /* COOL END */
 
         /* SURPRISED BEGIN */
-        EmoteType SURPRISED = new EmoteType("Surprised", 1);
+        EmoteType SURPRISED = new EmoteType("Surprised", 1,false);
         SURPRISED.appendTexture("6b7f24bb6a4585de8f42303161bded5c8398ce375631be149460d6835aec44e");
         SURPRISED.appendTexture("33c760f660d447846ab6b3d5a914c4b01f10672b63d4311d468b6dc28ba0e3");
         SURPRISED.appendTexture("382d15e94182206025973ff1928f4456bf7abaff737942d54b1c5699892c");
@@ -150,7 +150,7 @@ public class EmoteType extends CosmeticType<Emote> {
         /* SURPRISED END */
 
         /* WINK BEGIN */
-        EmoteType WINK = new EmoteType("Wink", 2);
+        EmoteType WINK = new EmoteType("Wink", 2,false);
         WINK.appendTexture("ef66c7485ccb853a6538122e45c8a4821fbe097f96a6060feb981f7a2bba890");
         WINK.appendTexture("a5d43eb0ec5f6de1d469b69680978a6dd7117772ee0d82ffdf08749e84df7ed");
         WINK.appendTexture("473e72cc371de25f3305665769dd7e9ff1161695252e799612580deeedd3", 2);
@@ -159,7 +159,7 @@ public class EmoteType extends CosmeticType<Emote> {
         /* WINK END */
 
         /* RAISE EYEBROWS BEGIN */
-        EmoteType RAISE_EYEBROWS = new EmoteType("RaiseEyebrows", 3);
+        EmoteType RAISE_EYEBROWS = new EmoteType("RaiseEyebrows", 3,false);
         RAISE_EYEBROWS.appendTexture("b69b3af7f829d1d9c18dd9c94c79cef49c54bffa16d4c334c20e4033baf244b7");
         RAISE_EYEBROWS.appendTexture("75ce894bf9a1552810afd4a8419e7ec362dab414d88ae287f2a5a1b65033fc13");
         RAISE_EYEBROWS.appendTexture("b69b3af7f829d1d9c18dd9c94c79cef49c54bffa16d4c334c20e4033baf244b7");
@@ -174,7 +174,7 @@ public class EmoteType extends CosmeticType<Emote> {
         /* RAISE EYEBROWS END */
 
         /* SCARY CANDLE BEGIN */
-        EmoteType SCARY_CANDLE = new EmoteType("ScaryCandle", 4);
+        EmoteType SCARY_CANDLE = new EmoteType("ScaryCandle", 4,false);
         SCARY_CANDLE.appendTexture("8c54055ee8f9e7638830c79ff12de81e9c7c4e8f3ba3db555019a65872b9c6c");
         SCARY_CANDLE.appendTexture("2efb5c198fe74feb988dcb9af890b69e8169f5714a7ab4fe8795bd1f66df637f");
         SCARY_CANDLE.appendTexture("8c54055ee8f9e7638830c79ff12de81e9c7c4e8f3ba3db555019a65872b9c6c");
@@ -189,7 +189,7 @@ public class EmoteType extends CosmeticType<Emote> {
         /* SCARY CANDLE END */
 
         /* GLOWING PUMPKIN BEGIN */
-        EmoteType GLOWING_PUMPKIN = new EmoteType("GlowingPumpkin", 4);
+        EmoteType GLOWING_PUMPKIN = new EmoteType("GlowingPumpkin", 4,false);
         GLOWING_PUMPKIN.appendTexture("9512bb5c7813609fab6d6e71d365f20a967d7006e9c2fb1bffb29cabc90db456");
         GLOWING_PUMPKIN.appendTexture("be4830033ad2a57838b6c98ba4d2bea6dda79d7a06e10cba2d4f4e0082f7278");
         GLOWING_PUMPKIN.appendTexture("9512bb5c7813609fab6d6e71d365f20a967d7006e9c2fb1bffb29cabc90db456");
@@ -204,7 +204,7 @@ public class EmoteType extends CosmeticType<Emote> {
         /* GLOWING PUMPKIN END */
 
         /* LOVESTRUCK ALLAY BEGIN */
-        EmoteType LOVESTRUCK_ALLAY = new EmoteType("LovestruckAllay", 3);
+        EmoteType LOVESTRUCK_ALLAY = new EmoteType("LovestruckAllay", 3,false);
         LOVESTRUCK_ALLAY.appendTexture("9ea6f0cd31e6d6c9269b7035c707ff57037f0e2d6524756dddd063cc4567c8a2");
         LOVESTRUCK_ALLAY.appendTexture("da82888584f0db1cc4f00226ae86ccce2c0f38d878f906b37fd6920e675b4a83");
         LOVESTRUCK_ALLAY.appendTexture("9ea6f0cd31e6d6c9269b7035c707ff57037f0e2d6524756dddd063cc4567c8a2");
@@ -227,7 +227,7 @@ public class EmoteType extends CosmeticType<Emote> {
                 }
                 MessageManager.addMessage(Category.EMOTES.getConfigPath() + "." + key + ".Name", key);
                 MessageManager.addMessage(Category.EMOTES.getConfigPath() + "." + key + ".Description", "A custom emote!");
-                EmoteType custom = new EmoteType(key, emotes.getInt(key + ".ticksPerFrame"));
+                EmoteType custom = new EmoteType(key, emotes.getInt(key + ".ticksPerFrame"),false);
                 for (String url : emotes.getStringList(key + ".urls")) {
                     custom.appendTexture(url);
                 }
@@ -238,8 +238,8 @@ public class EmoteType extends CosmeticType<Emote> {
     private final List<ItemStack> frames = new ArrayList<>();
     private final int ticksPerFrame;
 
-    private EmoteType(String configName, int ticksPerFrame) {
-        super(Category.EMOTES, configName, XMaterial.PLAYER_HEAD, Emote.class);
+    private EmoteType(String configName, int ticksPerFrame,boolean special) {
+        super(Category.EMOTES, configName, XMaterial.PLAYER_HEAD, Emote.class,true,special);
         this.ticksPerFrame = ticksPerFrame;
         if (GENERATE_MISSING_MESSAGES) {
             MessageManager.addMessage(getConfigPath() + ".Name", configName);

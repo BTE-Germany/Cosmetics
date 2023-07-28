@@ -52,7 +52,7 @@ public abstract class Mount extends EntityCosmetic<MountType, Entity> implements
     protected final boolean placesBlocks = getType().doesPlaceBlocks();
 
     public Mount(UltraPlayer ultraPlayer, MountType type, UltraCosmetics ultraCosmetics) {
-        super(ultraPlayer, type, ultraCosmetics);
+        super(ultraPlayer, type, ultraCosmetics,false);
     }
 
     /**

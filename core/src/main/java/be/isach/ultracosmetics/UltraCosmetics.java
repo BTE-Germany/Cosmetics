@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics;
 
 import be.isach.ultracosmetics.command.CommandManager;
+import be.isach.ultracosmetics.command.ShopCommand;
 import be.isach.ultracosmetics.config.AutoCommentConfiguration;
 import be.isach.ultracosmetics.config.CustomConfiguration;
 import be.isach.ultracosmetics.config.FunctionalConfigLoader;
@@ -9,7 +10,6 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
-import be.isach.ultracosmetics.economy.EconomyHandler;
 import be.isach.ultracosmetics.hook.ChestSortHook;
 import be.isach.ultracosmetics.hook.DiscordSRVHook;
 import be.isach.ultracosmetics.hook.PlaceholderHook;
@@ -27,7 +27,6 @@ import be.isach.ultracosmetics.player.UltraPlayerManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.run.InvalidWorldChecker;
 import be.isach.ultracosmetics.run.VanishChecker;
-import be.isach.ultracosmetics.treasurechests.TreasureChestManager;
 import be.isach.ultracosmetics.util.ArmorStandManager;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.util.PermissionPrinter;
@@ -123,8 +122,6 @@ public class UltraCosmetics extends JavaPlugin {
      */
     private ArmorStandManager armorStandManager;
 
-    private EconomyHandler economyHandler;
-
     private PermissionManager permissionManager;
 
     private DiscordSRVHook discordHook;
@@ -132,7 +129,6 @@ public class UltraCosmetics extends JavaPlugin {
     private ChestSortHook chestSortHook;
 
     private UnmovableItemListener unmovableItemListener;
-    private TreasureChestManager treasureChestManager;
 
     /**
      * Manages WorldGuard flags.
@@ -216,6 +212,7 @@ public class UltraCosmetics extends JavaPlugin {
         // so we can print helpful error messages about
         // why the plugin didn't start correctly.
         commandManager = new CommandManager(this);
+        getCommand("shop").setExecutor(new ShopCommand());
 
         // Also register early so we can send a message about issues.
         getServer().getPluginManager().registerEvents(new PriorityListener(this), this);
@@ -268,8 +265,8 @@ public class UltraCosmetics extends JavaPlugin {
 
         // Beginning of boot log. basic informations.
         getSmartLogger().write("-------------------------------------------------------------------");
-        getSmartLogger().write("Thanks for using UltraCosmetics! Version: " + updateChecker.getCurrentVersion().versionClassifierCommit());
-        getSmartLogger().write("Plugin by Datatags. Original Author: iSach");
+        getSmartLogger().write("Version: " + updateChecker.getCurrentVersion().versionClassifierCommit());
+        getSmartLogger().write("Plugin Version for BTE-Germany");
         getSmartLogger().write("Link: https://bit.ly/UltraCosmetics");
 
         if (activeProblems.contains(Problem.BAD_MC_VERSION)) {
@@ -292,7 +289,6 @@ public class UltraCosmetics extends JavaPlugin {
         }
         migrateConfigToMiniMessage();
 
-        treasureChestManager = new TreasureChestManager(this);
 
         // Register Listeners.
         registerListeners();
@@ -390,7 +386,7 @@ public class UltraCosmetics extends JavaPlugin {
         }
 
         // Start up bStats
-        setupMetrics();
+        //setupMetrics();
 
         this.menus = new Menus(this);
 
@@ -460,7 +456,6 @@ public class UltraCosmetics extends JavaPlugin {
      * Sets the economy up.
      */
     private void setupEconomy() {
-        economyHandler = new EconomyHandler(this);
         UltraCosmeticsData.get().checkTreasureChests();
     }
 
@@ -685,10 +680,6 @@ public class UltraCosmetics extends JavaPlugin {
         return armorStandManager;
     }
 
-    public EconomyHandler getEconomyHandler() {
-        return economyHandler;
-    }
-
     public PermissionManager getPermissionManager() {
         return permissionManager;
     }
@@ -707,10 +698,6 @@ public class UltraCosmetics extends JavaPlugin {
 
     public UnmovableItemListener getUnmovableItemListener() {
         return unmovableItemListener;
-    }
-
-    public TreasureChestManager getTreasureChestManager() {
-        return treasureChestManager;
     }
 
     public CustomConfiguration loadConfiguration(FunctionalConfigLoader loaderFunc) {

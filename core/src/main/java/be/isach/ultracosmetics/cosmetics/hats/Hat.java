@@ -15,7 +15,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 public class Hat extends ArmorCosmetic<HatType> {
 
     public Hat(UltraPlayer owner, HatType type, UltraCosmetics ultraCosmetics) {
-        super(owner, type, ultraCosmetics);
+        super(owner, type, ultraCosmetics,false);
         itemStack = type.getItemStack();
     }
 

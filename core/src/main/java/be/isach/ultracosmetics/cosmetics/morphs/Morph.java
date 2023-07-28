@@ -26,7 +26,7 @@ public abstract class Morph extends Cosmetic<MorphType> {
     protected MobDisguise disguise;
 
     public Morph(UltraPlayer owner, MorphType type, UltraCosmetics ultraCosmetics) {
-        super(owner, type, ultraCosmetics);
+        super(owner, type, ultraCosmetics,false);
     }
 
     @Override

@@ -130,6 +130,13 @@ Menu:
       Lore: '<gray>Freigeschaltet: </gray><white><unlocked>'
       Tooltip-Equip: '<bold><aqua>Ausrüsten:'
       Tooltip-Unequip: '<bold><red>Entfernen:'
+  Special:
+    Title: <bold>Spezial
+    Button:
+      Name: <bold><red>Todeseffekte
+      Lore: '<gray>Freigeschaltet: </gray><white><unlocked>'
+      Tooltip-Equip: '<bold><aqua>Ausrüsten:'
+      Tooltip-Unequip: '<bold><red>Entfernen:'
   Buy-Ammo:
     Title: <bold>Munition kaufen
   Misc:
@@ -185,14 +192,14 @@ Treasure-Chests-Loot:
     <dark_purple>Projektileffekt
     <cosmetic>
 Treasure-Chests-Loot-Messages:
-  Ammo: <prefix> <bold><gold><name> hat <ammo> <cosmetic> Munition gefunden
-  Money: <prefix> <bold><gold><name> hat $<money> gefunden
+  Ammo: '<prefix> <bold><gold><name> hat <ammo> <cosmetic> Munition gefunden'
+  Money: '<prefix> <bold><gold><name> hat <money> Coinsgefunden'
   Pets: '<prefix> <bold><gold><name> hat etwas seltenes gefunden: <cosmetic>'
   Mounts: '<prefix> <bold><gold><name> hat etwas seltenes gefunden: <cosmetic>'
   Particle-Effects: '<prefix> <bold><gold><name> hat etwas legendäres gefunden: <cosmetic>'
   Morphs: '<prefix> <bold><gold><name> hat etwas legendäres gefunden: <cosmetic>'
   Hats: '<prefix> <bold><gold><name> hat etwas seltenes gefunden: <cosmetic>'
-  Gadgets: <prefix> <bold><gold><name> hat das Gadget <cosmetic> gefunden
+  Gadgets: '<prefix> <bold><gold><name> hat das Gadget <cosmetic> gefunden'
   Suits: '<prefix> <bold><gold><name> hat etwas seltenes gefunden: <cosmetic>'
   Emotes: '<prefix> <bold><gold><name> hat etwas seltenes gefunden: <cosmetic>'
   Death-Effects: '<prefix> <bold><gold><name> hat etwas seltenes gefunden: <cosmetic>'

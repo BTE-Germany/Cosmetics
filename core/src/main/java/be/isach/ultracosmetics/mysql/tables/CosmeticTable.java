@@ -24,7 +24,8 @@ public class CosmeticTable extends Table {
         tableInfo.add(new StringColumn("type", 32, true));
         tableInfo.add(new UniqueConstraint("category", "type"));
         tableInfo.add(new UniqueConstraint("id", "category"));
-    }
+        tableInfo.add(new Column<>("price", "INTEGER NOT NULL DEFAULT 0", Integer.class));
+        }
 
     @Override
     public void loadBaseData() {

@@ -31,8 +31,8 @@ public abstract class ArmorCosmetic<T extends CosmeticType<?>> extends Cosmetic<
     protected final Map<Attribute, Double> attributes;
     protected ItemStack itemStack;
 
-    public ArmorCosmetic(UltraPlayer owner, T type, UltraCosmetics ultraCosmetics) {
-        super(owner, type, ultraCosmetics);
+    public ArmorCosmetic(UltraPlayer owner, T type, UltraCosmetics ultraCosmetics,boolean special) {
+        super(owner, type, ultraCosmetics,special);
         if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_9)) {
             attributes = getAttributes();
         } else {

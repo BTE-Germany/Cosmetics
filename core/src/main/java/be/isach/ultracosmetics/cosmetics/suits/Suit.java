@@ -17,7 +17,7 @@ import be.isach.ultracosmetics.util.ItemFactory;
 public abstract class Suit extends ArmorCosmetic<SuitType> {
 
     public Suit(UltraPlayer ultraPlayer, SuitType suitType, UltraCosmetics ultraCosmetics) {
-        super(ultraPlayer, suitType, ultraCosmetics);
+        super(ultraPlayer, suitType, ultraCosmetics,false);
         setupItemStack();
     }
 

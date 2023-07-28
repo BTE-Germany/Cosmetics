@@ -8,6 +8,7 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
+import be.isach.ultracosmetics.cosmetics.suits.Suit;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.SmartLogger.LogLevel;
@@ -49,6 +50,7 @@ public abstract class CosmeticType<T extends Cosmetic<?>> {
             // Happens when permission is already registered, i.e. UltraCosmetics is being reloaded externally...
         }
     }
+
 
     public static void loadCustomCosmetics() {
         try {
@@ -114,17 +116,38 @@ public abstract class CosmeticType<T extends Cosmetic<?>> {
     private final Class<? extends T> clazz;
     private final Category category;
     private final XMaterial material;
+    private  final boolean special;
     private Permission permission;
 
     public CosmeticType(Category category, String configName, XMaterial material, Class<? extends T> clazz) {
-        this(category, configName, material, clazz, true);
+        this(category, configName, material, clazz, true,false);
     }
 
-    public CosmeticType(Category category, String configName, XMaterial material, Class<? extends T> clazz, boolean registerPerm) {
+    public CosmeticType(Category category, String configName, XMaterial material, Class<? extends T> clazz, boolean special) {
         this.category = category;
         this.configName = configName;
         this.material = material;
         this.clazz = clazz;
+        this.special = special;
+
+        if (GENERATE_MISSING_MESSAGES) {
+            MessageManager.addMessage(getConfigPath() + ".Description", "Description");
+        }
+        Component colors = MessageManager.getMiniMessage().deserialize(SettingsManager.getConfig().getString("Description-Style", ""));
+        this.description = MessageManager.getLore(getCategory().getConfigPath() + "." + configName + ".Description", colors.style());
+
+        setupConfig(SettingsManager.getConfig(), getConfigPath());
+        VALUES.computeIfAbsent(category, l -> new ArrayList<>()).add(this);
+        if (isEnabled()) {
+            ENABLED.computeIfAbsent(category, l -> new ArrayList<>()).add(this);
+        }
+    }
+    public CosmeticType(Category category, String configName, XMaterial material, Class<? extends T> clazz, boolean registerPerm,boolean special) {
+        this.category = category;
+        this.configName = configName;
+        this.material = material;
+        this.clazz = clazz;
+        this.special = special;
 
         if (GENERATE_MISSING_MESSAGES) {
             MessageManager.addMessage(getConfigPath() + ".Description", "Description");
@@ -230,6 +253,15 @@ public abstract class CosmeticType<T extends Cosmetic<?>> {
      */
     public int getChestWeight() {
         return SettingsManager.getConfig().getInt(category.getConfigPath() + "." + getConfigName() + ".Treasure-Chest-Weight");
+    }
+
+    /**
+     * Checks if the cosmetic is special and should be treated differently than other cosmetics.
+     *
+     * @return if its special
+     */
+    public boolean isSpecial() {
+        return special;
     }
 
     /**

@@ -37,7 +37,7 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
     protected boolean update = true;
 
     public ParticleEffect(UltraPlayer ultraPlayer, ParticleEffectType type, UltraCosmetics ultraCosmetics) {
-        super(ultraPlayer, type, ultraCosmetics);
+        super(ultraPlayer, type, ultraCosmetics,false);
     }
 
     @Override

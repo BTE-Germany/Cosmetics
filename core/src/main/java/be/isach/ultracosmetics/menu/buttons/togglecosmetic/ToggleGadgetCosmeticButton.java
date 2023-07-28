@@ -19,7 +19,7 @@ public class ToggleGadgetCosmeticButton extends ToggleCosmeticButton {
     @Override
     protected void handleRightClick(ClickData clickData) {
         UltraPlayer ultraPlayer = clickData.getClicker();
-        if (ultraCosmetics.getEconomyHandler().isUsingEconomy() && UltraCosmeticsData.get().isAmmoPurchaseEnabled() && ((GadgetType) cosmeticType).requiresAmmo()) {
+        if (UltraCosmeticsData.get().isAmmoPurchaseEnabled() && ((GadgetType) cosmeticType).requiresAmmo()) {
             ultraCosmetics.getMenus().openAmmoPurchaseMenu((GadgetType) cosmeticType, ultraPlayer, () -> clickData.getMenu().refresh(ultraPlayer));
         }
     }
@@ -28,11 +28,11 @@ public class ToggleGadgetCosmeticButton extends ToggleCosmeticButton {
     protected boolean handleActivate(ClickData clickData) {
         UltraPlayer ultraPlayer = clickData.getClicker();
         GadgetType gadgetType = ultraPlayer.getCurrentGadget().getType();
-        if (ultraCosmetics.getEconomyHandler().isUsingEconomy() && UltraCosmeticsData.get().isAmmoPurchaseEnabled()
+       /* if (ultraCosmetics.getEconomyHandler().isUsingEconomy() && UltraCosmeticsData.get().isAmmoPurchaseEnabled()
                 && gadgetType.requiresAmmo() && ultraPlayer.getAmmo(gadgetType) < 1) {
             ultraCosmetics.getMenus().openAmmoPurchaseMenu(gadgetType, ultraPlayer, () -> clickData.getMenu().refresh(ultraPlayer));
             return false;
-        }
+        }*/
         return super.handleActivate(clickData);
     }
 
@@ -45,9 +45,7 @@ public class ToggleGadgetCosmeticButton extends ToggleCosmeticButton {
         lore.add("");
         int ammo = ultraPlayer.getAmmo(gadgetType);
         lore.add(MessageManager.getLegacyMessage("Ammo", Placeholder.unparsed("ammo", String.valueOf(ammo))));
-        if (ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
-            lore.add(MessageManager.getLegacyMessage("Right-Click-Buy-Ammo"));
-        }
+
     }
 
     @Override

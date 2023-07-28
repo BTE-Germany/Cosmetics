@@ -2,18 +2,10 @@ package be.isach.ultracosmetics.treasurechests;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.player.UltraPlayerManager;
 import be.isach.ultracosmetics.treasurechests.loot.LootReward;
-import be.isach.ultracosmetics.util.Area;
-import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.SmartLogger.LogLevel;
-import be.isach.ultracosmetics.util.StructureRollback;
-import com.cryptomorin.xseries.XMaterial;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,178 +13,129 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Lidded;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 public class TreasureChest implements Listener {
 
-    private final StructureRollback rollback;
-    private final List<Block> unopenedChests = new ArrayList<>();
-    private final StructureRollback chestRollback = new StructureRollback();
-    private final UUID owner;
-    private final TreasureRandomizer randomGenerator;
-    private final Location center;
-    private final Particles particleEffect;
-    private int chestsLeft = SettingsManager.getConfig().getInt("TreasureChests.Count", 4);
     private final Player player;
-    private final Set<Item> items = new HashSet<>();
-    private final Set<ArmorStand> holograms = new HashSet<>();
-    private boolean stopping;
-    private boolean cooldown = false;
-    private final TreasureChestDesign design;
-    private final Location preLoc;
-    private final TreasureLocation treasureLoc;
-    private final boolean large;
-    private final PlaceBlocksRunnable blocksRunnable;
-    private final boolean allowDamage;
+    private final Location chestLocation;
+    private final TreasureRandomizer randomGenerator;
+    private Item item;
+    private final ArrayList<ArmorStand> holograms;
+    private final TreasureChest instance;
+    private boolean opened = false;
 
-    public TreasureChest(UUID owner, final TreasureChestDesign design, Location preLoc, TreasureLocation destLoc) {
-        this.design = design;
-        this.particleEffect = design.getEffect();
-        this.owner = owner;
-        this.preLoc = preLoc;
-        this.treasureLoc = destLoc;
-        large = SettingsManager.getConfig().getBoolean("TreasureChests.Large");
-        allowDamage = SettingsManager.getConfig().getBoolean("TreasureChests.Allow-Damage");
-        if (chestsLeft > 4) {
-            if (large && chestsLeft > 12) {
-                chestsLeft = 12;
-            } else if (!large) {
-                chestsLeft = 4;
-            }
-        }
-        if (chestsLeft < 1) chestsLeft = 1;
+    private TreasureChestType type;
+
+    public TreasureChest(UUID owner) {
+        this(owner, TreasureChestType.DEFAULT);
+    }
+    public TreasureChest(UUID owner, TreasureChestType type) {
+        holograms = new ArrayList<>();
+        this.type = type;
+        this.player = getPlayer(owner);
+        boolean allowDamage = SettingsManager.getConfig().getBoolean("TreasureChests.Allow-Damage");
+        Location playerLocation = player.getLocation();
+        chestLocation = playerLocation.clone().add(new Vector(0,0,3));
+
+        chestLocation.getBlock().setType(Material.CHEST);
 
         UltraCosmetics uc = UltraCosmeticsData.get().getPlugin();
         UltraPlayerManager pm = uc.getPlayerManager();
 
         Bukkit.getPluginManager().registerEvents(this, uc);
 
-        this.player = getPlayer();
 
         Block centerPossibleBlock = player.getLocation().getBlock();
-        center = centerPossibleBlock.getLocation();
-        rollback = new StructureRollback(new Area(center.clone().subtract(0, 1, 0), large ? 3 : 2, 3));
-        if (!BlockUtils.isAir(centerPossibleBlock.getType())) {
-            rollback.setToRestore(centerPossibleBlock, Material.AIR);
-        }
 
-        if (pm.getUltraPlayer(getPlayer()).getCurrentMorph() != null) {
-            pm.getUltraPlayer(getPlayer()).setSeeSelfMorph(false);
-        }
 
-        this.randomGenerator = new TreasureRandomizer(getPlayer(), getPlayer().getLocation());
+        randomGenerator = new TreasureRandomizer(player, playerLocation);
 
-        blocksRunnable = new PlaceBlocksRunnable(this);
-        blocksRunnable.runTaskTimer(uc, 0L, 12L);
 
         Bukkit.getScheduler().runTaskLater(uc, () -> {
             if (pm.getUltraPlayer(player) != null && pm.getUltraPlayer(player).getCurrentTreasureChest() == TreasureChest.this) {
-                forceOpen(45);
+                forceOpen(0);
             }
         }, 1200L);
 
-        pm.getUltraPlayer(getPlayer()).setCurrentTreasureChest(this);
+        pm.getUltraPlayer(player).setCurrentTreasureChest(this);
 
-        new PlayerBounceRunnable(this).runTaskTimer(uc, 0L, 1L);
+        instance = this;
     }
 
-    public Player getPlayer() {
+    public Player getPlayer(UUID owner) {
         if (owner != null) {
             return Bukkit.getPlayer(owner);
         }
         return null;
     }
 
-    public void clear() {
-        rollback.rollback();
-        if (stopping) {
-            cleanup();
-        } else {
-            Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), this::cleanup, 30L);
-        }
+    public Location getChestLocation() {
+        return chestLocation;
     }
 
-    private void cleanup() {
-        for (ArmorStand hologram : holograms) {
-            hologram.remove();
-        }
-        for (Item item : items) {
-            item.remove();
-        }
-        cancelRunnables();
-        items.clear();
-        unopenedChests.clear();
-        holograms.clear();
-        rollback.cleanup();
-        chestRollback.cleanup();
-        if (getPlayer() != null) {
-            UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(getPlayer()).setCurrentTreasureChest(null);
-            if (preLoc != null) {
-                getPlayer().teleport(preLoc);
-            }
-        }
-        HandlerList.unregisterAll(this);
+
+    public void forceOpen(int i) {
+        Block block = chestLocation.getBlock();
+        opened = true;
+
+        Lidded state = (Lidded) block.getState();
+        state.open();
+        ((BlockState) state).update();
+
+        randomGenerator.setLocation(block.getLocation().clone().add(0.0D, 1.0D, 0.0D));
+        LootReward reward = randomGenerator.giveRandomThing(this);
+
+        item = spawnItem(reward.getStack(), block.getLocation());
+        Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> makeHolograms(block.getLocation(), reward), 10L);
+        Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), this::clear, 100L);
     }
 
-    private void cancelRunnables() {
-        // cancels all child runnables as well
-        blocksRunnable.propogateCancel();
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        Block block = event.getClickedBlock();
+        if(event.getPlayer() != player) return;
+        if(opened) return;
+        if(block==null) return;
+        if(block.getType()!=Material.CHEST) return;
+        event.setCancelled(true);
+        opened = true;
+
+        Lidded state = (Lidded) block.getState();
+        state.open();
+        ((BlockState) state).update();
+
+        randomGenerator.setLocation(block.getLocation().clone().add(0.0D, 1.0D, 0.0D));
+        LootReward reward = randomGenerator.giveRandomThing(this);
+
+        item = spawnItem(reward.getStack(), block.getLocation());
+        Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> makeHolograms(block.getLocation(), reward), 10L);
+        Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), this::clear, 100L);
     }
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
-        if (event.getPlayer() == getPlayer() && !event.getFrom().getBlock().equals(event.getTo().getBlock())) {
+        if (event.getPlayer() == player && !event.getFrom().getBlock().equals(event.getTo().getBlock())) {
             event.setCancelled(true);
-            event.getPlayer().teleport(event.getFrom());
         }
     }
 
-    public void forceOpen(int delay) {
-        if (delay == 0) {
-            stopping = true;
-            for (int i = 0; i < chestsLeft; i++) {
-                LootReward reward = randomGenerator.giveRandomThing(this);
-                String[] names = reward.getName();
-                MessageManager.send(getPlayer(), "You-Won-Treasure-Chests",
-                        Placeholder.unparsed("name", names[names.length - 1])
-                );
-            }
-            return;
-        }
 
-        for (final Block b : unopenedChests) {
-            openChest(b);
-            randomGenerator.setLocation(b.getLocation().clone().add(0.0D, 1.0D, 0.0D));
-            LootReward reward = randomGenerator.giveRandomThing(this);
-
-            items.add(spawnItem(reward.getStack(), b.getLocation()));
-            Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> makeHolograms(b.getLocation(), reward), 15L);
-
-            chestsLeft -= 1;
-        }
-        unopenedChests.clear();
-
-        Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), this::clear, delay);
+    private Item spawnItem(ItemStack stack, Location loc) {
+        return ItemFactory.spawnUnpickableItem(stack, loc.clone().add(0.5, 1.2, 0.5), new Vector(0, 0.25, 0));
     }
 
     private void makeHolograms(Location location, LootReward reward) {
@@ -217,114 +160,20 @@ public class TreasureChest implements Listener {
         return armorStand;
     }
 
-    public boolean isSpecialEntity(Entity entity) {
-        return items.contains(entity) || holograms.contains(entity);
-    }
-
-    protected void openChest(Block block) {
-        // Lidded API didn't exist until 1.16,
-        // and EnderChest wasn't lidded until 1.19!
-        try {
-            Lidded state = (Lidded) block.getState();
-            state.open();
-            ((BlockState) state).update();
-        } catch (NoClassDefFoundError | ClassCastException ignored) {
+    public void clear() {
+        for(ArmorStand h: holograms) {
+            h.remove();
         }
-    }
-
-    @EventHandler
-    public void onInter(final PlayerInteractEvent event) {
-        Block block = event.getClickedBlock();
-        if (block == null) return;
-        if (rollback.containsBlock(block)) {
-            event.setCancelled(true);
-            return;
+        item.remove();
+        chestLocation.getBlock().setType(Material.AIR);
+        if (player != null) {
+            UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).setCurrentTreasureChest(null);
         }
-        if (!chestRollback.containsBlock(block)) return;
-        event.setCancelled(true);
-        if (!unopenedChests.contains(block)) return;
-        if (event.getPlayer() != getPlayer() || cooldown) return;
-
-        openChest(block);
-        Location loc = block.getLocation();
-        randomGenerator.setLocation(loc.clone().add(0.0D, 1.0D, 0.0D));
-        LootReward reward = randomGenerator.giveRandomThing(this);
-
-        cooldown = true;
-        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> cooldown = false, 3L);
-
-        ItemStack is = reward.getStack();
-
-        items.add(spawnItem(is, loc));
-        Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> makeHolograms(loc, reward), 15L);
-
-        chestsLeft -= 1;
-        unopenedChests.remove(block);
-        if (chestsLeft == 0) {
-            Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), this::clear, 50L);
-        }
+        HandlerList.unregisterAll(instance);
     }
 
-    @EventHandler
-    public void onDamage(EntityDamageEvent event) {
-        if (!allowDamage && event.getEntity() == getPlayer()) {
-            event.setCancelled(true);
-        }
+    public TreasureChestType getType() {
+        return type;
     }
 
-    private Item spawnItem(ItemStack stack, Location loc) {
-        return ItemFactory.spawnUnpickableItem(stack, loc.clone().add(0.5, 1.2, 0.5), new Vector(0, 0.25, 0));
-    }
-
-    @EventHandler
-    public void onKick(PlayerKickEvent event) {
-        if (event.getPlayer() == getPlayer() && event.getReason().equals("Flying is not enabled on this server")) {
-            UltraCosmeticsData.get().getPlugin().getSmartLogger().write(LogLevel.INFO, "Cancelled flight kick while opening treasure chest");
-            event.setCancelled(true);
-            event.getPlayer().teleport(center);
-        }
-    }
-
-    public TreasureLocation getTreasureLocation() {
-        return treasureLoc;
-    }
-
-    public Particles getParticleEffect() {
-        return particleEffect;
-    }
-
-    public Location getCenter() {
-        return center.clone();
-    }
-
-    public TreasureChestDesign getDesign() {
-        return design;
-    }
-
-    public void addChest(Block b, Material newType) {
-        unopenedChests.add(b);
-        chestRollback.setToRestore(b, newType);
-    }
-
-    public void addRestoreBlock(Block b, XMaterial newType) {
-        rollback.setToRestore(b, newType);
-    }
-
-    public int getChestsLeft() {
-        return chestsLeft;
-    }
-
-    /**
-     * Cancel eggs from merging
-     */
-    @EventHandler
-    public void onItemMerge(ItemMergeEvent event) {
-        if (items.contains(event.getEntity()) || items.contains(event.getTarget())) {
-            event.setCancelled(true);
-        }
-    }
-
-    public boolean isLarge() {
-        return large;
-    }
 }

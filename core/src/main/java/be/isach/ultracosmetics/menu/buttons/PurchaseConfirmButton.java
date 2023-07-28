@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.menu.buttons;
 
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
-import be.isach.ultracosmetics.economy.EconomyHandler;
 import be.isach.ultracosmetics.menu.Button;
 import be.isach.ultracosmetics.menu.ClickData;
 import be.isach.ultracosmetics.menu.PurchaseData;
@@ -12,11 +12,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class PurchaseConfirmButton implements Button {
     private final PurchaseData purchaseData;
-    private final EconomyHandler eh;
 
-    public PurchaseConfirmButton(PurchaseData purchaseData, EconomyHandler eh) {
+    public PurchaseConfirmButton(PurchaseData purchaseData) {
         this.purchaseData = purchaseData;
-        this.eh = eh;
     }
 
     @Override
@@ -29,11 +27,14 @@ public class PurchaseConfirmButton implements Button {
         UltraPlayer player = clickData.getClicker();
         player.getBukkitPlayer().closeInventory();
         if (!purchaseData.canPurchase()) return;
-        eh.getHook().withdraw(player.getBukkitPlayer(), purchaseData.getPrice(), () -> {
+        int balance = UltraCosmeticsData.get().getPlugin().getMySqlConnectionManager().getPlayerData().getCoins(player.getUUID());
+        if(balance < purchaseData.getPrice()) {
+            player.sendMessage(MessageManager.getMessage("Not-Enough-Money"));
+        } else {
+            UltraCosmeticsData.get().getPlugin().getMySqlConnectionManager().getPlayerData().setCoins(player.getUUID(),balance-purchaseData.getPrice());
             player.sendMessage(MessageManager.getMessage("Successful-Purchase"));
             purchaseData.runOnPurchase();
-        }, () -> {
-            player.sendMessage(MessageManager.getMessage("Not-Enough-Money"));
-        });
+        }
+
     }
 }

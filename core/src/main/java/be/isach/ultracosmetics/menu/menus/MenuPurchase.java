@@ -30,7 +30,7 @@ public class MenuPurchase extends Menu {
         putItem(inventory, 13, new PurchaseShowcaseButton(purchaseData), player);
 
         // Purchase Item
-        PurchaseConfirmButton confirmButton = new PurchaseConfirmButton(purchaseData, ultraCosmetics.getEconomyHandler());
+        PurchaseConfirmButton confirmButton = new PurchaseConfirmButton(purchaseData);
         for (int i = 27; i < 30; i++) {
             for (int j = i; j <= i + 18; j += 9) {
                 putItem(inventory, j, confirmButton, player);

@@ -28,6 +28,7 @@ public class Menus {
     private final Map<Category, CosmeticMenu<?>> categoryMenus = new HashMap<>();
     private final MenuMain mainMenu;
     private final CustomMainMenu customMainMenu;
+    private final MenuSpecial specialsMenu;
 
     public Menus(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
@@ -46,6 +47,7 @@ public class Menus {
         categoryMenus.put(Category.SUITS_LEGGINGS, ms);
         categoryMenus.put(Category.SUITS_BOOTS, ms);
         this.mainMenu = new MenuMain(ultraCosmetics);
+        this.specialsMenu = new MenuSpecial(ultraCosmetics);
         File customFile = CustomMainMenu.getFile(ultraCosmetics);
         if (!customFile.exists()) {
             ultraCosmetics.saveResource(customFile.getName(), false);
@@ -82,6 +84,10 @@ public class Menus {
 
     public CosmeticMenu<?> getCategoryMenu(Category category) {
         return categoryMenus.get(category);
+    }
+
+    public MenuSpecial getSpecialsMenu() {
+        return specialsMenu;
     }
 
     /**

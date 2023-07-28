@@ -13,6 +13,7 @@ Categories-Enabled:
   Emotes: true
   Projectile-Effects: true
   Death-Effects: true
+  Speical: true
 
 # Other settings for categories:
 # - The Item in Main Menu.

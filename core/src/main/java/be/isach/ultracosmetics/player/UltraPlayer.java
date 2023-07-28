@@ -103,6 +103,11 @@ public class UltraPlayer {
     private String clientBrand = null;
 
     /**
+     * Does the player view the shop -> can buy items?
+     */
+    private boolean inShop = false;
+
+    /**
      * Allows to store custom data for each player easily.
      * Created on join, and deleted on quit.
      *
@@ -244,6 +249,14 @@ public class UltraPlayer {
         return (Suit) getCosmetic(Category.suitsFromSlot(slot));
     }
 
+    public boolean isInShop() {
+        return inShop;
+    }
+
+    public void setInShop(boolean inShop) {
+        this.inShop = inShop;
+    }
+
     public boolean hasCosmetic(Category category) {
         return equipped.containsKey(category);
     }
@@ -375,7 +388,6 @@ public class UltraPlayer {
      * Opens the Key Purchase Menu.
      */
     public void openKeyPurchaseMenu() {
-        if (!ultraCosmetics.getEconomyHandler().isUsingEconomy()) return;
 
         int price = SettingsManager.getConfig().getInt("TreasureChests.Key-Price");
         if (price < 1) return;

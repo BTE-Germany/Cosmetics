@@ -13,8 +13,8 @@ public class CosmeticParticleType<T extends Cosmetic<?>> extends CosmeticType<T>
     private final double particleMultiplier;
 
     public CosmeticParticleType(Category category, String configName, int repeatDelay, Particles effect,
-            XMaterial material, Class<? extends T> clazz, boolean supportsParticleMultiplier) {
-        super(category, configName, material, clazz);
+            XMaterial material, Class<? extends T> clazz, boolean supportsParticleMultiplier,boolean special) {
+        super(category, configName, material, clazz,true,special);
         this.effect = effect;
         this.repeatDelay = repeatDelay;
         if (supportsParticleMultiplier) {

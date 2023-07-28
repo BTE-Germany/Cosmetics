@@ -89,7 +89,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements UnmovableIt
     }
 
     public Gadget(UltraPlayer owner, GadgetType type, UltraCosmetics ultraCosmetics, boolean asynchronous) {
-        super(owner, type, ultraCosmetics);
+        super(owner, type, ultraCosmetics,false);
         this.asynchronous = asynchronous;
     }
 
@@ -248,12 +248,9 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements UnmovableIt
 
         boolean inShowroom = getUltraCosmetics().getWorldGuardManager().isInShowroom(player);
         if (requiresAmmo && ultraPlayer.getAmmo(getType()) < 1 && !inShowroom) {
-            if (UltraCosmeticsData.get().isAmmoPurchaseEnabled() && getUltraCosmetics().getEconomyHandler().isUsingEconomy()) {
-                getUltraCosmetics().getMenus().openAmmoPurchaseMenu(getType(), getOwner(), () -> {
-                });
-            } else {
+
                 MessageManager.send(getPlayer(), "No-Ammo");
-            }
+
             return;
         }
 

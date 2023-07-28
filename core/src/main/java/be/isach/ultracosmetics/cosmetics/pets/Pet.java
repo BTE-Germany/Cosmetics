@@ -69,7 +69,7 @@ public abstract class Pet extends EntityCosmetic<PetType, Mob> implements Updata
     protected ItemStack dropItem;
 
     public Pet(UltraPlayer owner, PetType petType, UltraCosmetics ultraCosmetics, ItemStack dropItem) {
-        super(owner, petType, ultraCosmetics);
+        super(owner, petType, ultraCosmetics,false);
         this.dropItem = dropItem;
     }
 

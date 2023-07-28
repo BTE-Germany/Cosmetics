@@ -10,7 +10,7 @@ public abstract class TreasureButton implements Button {
     protected final String buyKeyMessage;
 
     public TreasureButton(UltraCosmetics ultraCosmetics) {
-        canBuyKeys = ultraCosmetics.getEconomyHandler().isUsingEconomy() && SettingsManager.getConfig().getInt("TreasureChests.Key-Price") > 0;
+        canBuyKeys = SettingsManager.getConfig().getInt("TreasureChests.Key-Price") > 0;
         if (canBuyKeys) {
             buyKeyMessage = "\n" + MessageManager.getLegacyMessage("Click-Buy-Key") + "\n";
         } else {

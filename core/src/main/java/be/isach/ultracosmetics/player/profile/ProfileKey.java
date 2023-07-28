@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.player.profile;
 
 public enum ProfileKey {
     KEYS("Keys", "treasureKeys"),
+    COINS(null,"coins"),
     GADGETS_ENABLED("Gadgets-Enabled", "gadgetsEnabled"),
     MORPH_VIEW("Third-Person-Morph-View", "selfMorphView"),
     TREASURE_NOTIFICATION("Treasure-Notifications", "treasureNotifications"),

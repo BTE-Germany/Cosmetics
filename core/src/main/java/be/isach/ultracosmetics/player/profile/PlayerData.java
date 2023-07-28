@@ -22,6 +22,7 @@ import java.util.UUID;
 public class PlayerData {
     private UUID uuid;
     private int keys;
+    private int coins;
     private boolean gadgetsEnabled;
     private boolean morphSelfView;
     private boolean treasureNotifications;
@@ -45,6 +46,14 @@ public class PlayerData {
 
     public void setKeys(int keys) {
         this.keys = keys;
+    }
+
+    public int getCoins() {
+        return coins;
+    }
+
+    public void setCoins(int coins) {
+        this.coins = coins;
     }
 
     public boolean isGadgetsEnabled() {
@@ -201,6 +210,7 @@ public class PlayerData {
         treasureNotifications = (boolean) settings.get(ProfileKey.TREASURE_NOTIFICATION.getSqlKey());
         filterByOwned = (boolean) settings.get(ProfileKey.FILTER_OWNED.getSqlKey());
         keys = (int) settings.get(ProfileKey.KEYS.getSqlKey());
+        coins = pd.getCoins(uuid);
         if (sql.getPetNames() != null) {
             petNames = sql.getPetNames().getAllPetNames(uuid);
         }

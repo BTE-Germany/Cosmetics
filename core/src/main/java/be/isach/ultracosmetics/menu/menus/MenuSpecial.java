@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.menu;
+package be.isach.ultracosmetics.menu.menus;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
@@ -6,12 +6,10 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticEntType;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
-import be.isach.ultracosmetics.menu.buttons.ClearCosmeticButton;
-import be.isach.ultracosmetics.menu.buttons.CosmeticButton;
-import be.isach.ultracosmetics.menu.buttons.FilterCosmeticsButton;
-import be.isach.ultracosmetics.menu.buttons.MainMenuButton;
-import be.isach.ultracosmetics.menu.buttons.NextPageButton;
-import be.isach.ultracosmetics.menu.buttons.PreviousPageButton;
+import be.isach.ultracosmetics.cosmetics.type.PetType;
+import be.isach.ultracosmetics.menu.CosmeticMenu;
+import be.isach.ultracosmetics.menu.Menu;
+import be.isach.ultracosmetics.menu.buttons.*;
 import be.isach.ultracosmetics.permissions.PermissionManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import net.kyori.adventure.text.Component;
@@ -20,20 +18,16 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Difficulty;
 import org.bukkit.inventory.Inventory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
- * A cosmetic menu.
+ * Pet {@link be.isach.ultracosmetics.menu.Menu Menu}.
  *
  * @author iSach
- * @since 08-09-2016
+ * @since 08-23-2016
  */
-public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
+public class MenuSpecial extends Menu {
 
     public static final int[] COSMETICS_SLOTS = {
             10, 11, 12, 13, 14, 15, 16,
@@ -42,22 +36,12 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
             37, 38, 39, 40, 41, 42, 43
     };
 
-    /**
-     * Accuracy not guaranteed, specifically for suits.
-     */
-    protected final Category category;
-    private final boolean putItems;
     protected final PermissionManager pm = ultraCosmetics.getPermissionManager();
     private final Map<UUID, Integer> lastUsedPages = new HashMap<>();
     private final boolean hideNoPermissionItems = SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item");
 
-    public CosmeticMenu(UltraCosmetics ultraCosmetics, Category category,boolean putItems) {
+    public MenuSpecial(UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics);
-        this.category = category;
-        this.putItems = putItems;
-    }
-    public CosmeticMenu(UltraCosmetics ultraCosmetics, Category category) {
-        this(ultraCosmetics,category,true);
     }
 
     @Override
@@ -79,17 +63,15 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
         boolean hasUnlockable = hasUnlockable(player);
 
         // Cosmetic types.
-        if(putItems) {
-            Map<Integer, T> slots = getSlots(page, player);
-            for (Entry<Integer, T> entry : slots.entrySet()) {
+            Map<Integer, CosmeticType<?>> slots = getSlots(page, player);
+            for (Map.Entry<Integer, CosmeticType<?>> entry : slots.entrySet()) {
                 int slot = entry.getKey();
-                T cosmeticType = entry.getValue();
+                CosmeticType<?> cosmeticType = entry.getValue();
 
-                if (shouldHideItem(player, cosmeticType)) continue;
+                if (!shouldHideItem(player, cosmeticType)) continue;
                 CosmeticButton button = CosmeticButton.fromType(cosmeticType, player, ultraCosmetics);
                 putItem(inventory, slot, button, player);
             }
-        }
 
 
         if (page > 1) {
@@ -99,11 +81,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
             putItem(inventory, getSize() - 10, new NextPageButton(), player);
         }
 
-        putItem(inventory, inventory.getSize() - 5, new ClearCosmeticButton(category), player);
-
-        if (getCategory().hasGoBackArrow()) {
-            putItem(inventory, inventory.getSize() - 6, new MainMenuButton(ultraCosmetics), player);
-        }
+        putItem(inventory, inventory.getSize() - 6, new MainMenuButton(ultraCosmetics), player);
 
         if (hasUnlockable && !hideNoPermissionItems) {
             putItem(inventory, inventory.getSize() - 3, new FilterCosmeticsButton(), player);
@@ -134,11 +112,14 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
      */
     protected int getMaxPages(UltraPlayer player) {
         int i = 0;
-        for (CosmeticType<?> type : CosmeticType.enabledOf(category)) {
-            if (!shouldHideItem(player, type)) {
-                i++;
+        for(Category cat: Category.values()) {
+            for (CosmeticType<?> type : CosmeticType.enabledOf(cat)) {
+                if (shouldHideItem(player,type)) {
+                    i++;
+                }
             }
         }
+
         return Math.max(1, ((i - 1) / 28) + 1);
     }
 
@@ -171,12 +152,9 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
      */
     @Override
     protected Component getName() {
-        return MessageManager.getMessage("Menu." + category.getConfigPath() + ".Title");
+        return MessageManager.getMessage("Menu.Special.Title");
     }
 
-    public Category getCategory() {
-        return category;
-    }
 
     /**
      * Puts items in the inventory.
@@ -189,14 +167,18 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
     }
 
     @SuppressWarnings("unchecked")
-    protected Map<Integer, T> getSlots(int page, UltraPlayer player) {
+    protected Map<Integer,CosmeticType<?>> getSlots(int page, UltraPlayer player) {
         int start = 28 * (page - 1);
         int limit = 28;
         int current = 0;
-        Map<Integer, T> slots = new HashMap<>();
-        List<T> enabled = new ArrayList<>();
-        CosmeticType.enabledOf(category).forEach(t -> enabled.add((T) t));
-        enabled.removeIf(k -> shouldHideItem(player, k));
+        Map<Integer,CosmeticType<?>> slots = new HashMap<>();
+        ArrayList<CosmeticType<?>> enabled = new ArrayList<>();
+
+        for(Category cat: Category.values()) {
+            enabled.addAll(CosmeticType.valuesOf(cat));
+        }
+        enabled.removeIf(k -> !shouldHideItem(player, k));
+
         for (int i = start; current < limit && i < enabled.size(); i++) {
             slots.put(COSMETICS_SLOTS[current++ % 28], enabled.get(i));
         }
@@ -205,28 +187,24 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
 
 
     protected boolean shouldHideItem(UltraPlayer player, CosmeticType<?> cosmeticType) {
-        if(player.isInShop()) {
-            return player.canEquip(cosmeticType);
 
-        } else {
-            if(cosmeticType.isSpecial()) return true;
-            if (!player.canEquip(cosmeticType) ) {
-                return true;
-            }
-            return cosmeticType instanceof CosmeticEntType
-                    && ((CosmeticEntType<?>) cosmeticType).isMonster()
-                    && player.getBukkitPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL;
+        if (!player.canEquip(cosmeticType) && !cosmeticType.isSpecial()) {
+            return false;
         }
-
+        if(!cosmeticType.isSpecial() ) return true;
+        return cosmeticType instanceof CosmeticEntType
+                && ((CosmeticEntType<?>) cosmeticType).isMonster()
+                && player.getBukkitPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL;
     }
 
     protected boolean hasUnlockable(UltraPlayer player) {
         if (ultraCosmetics.getWorldGuardManager().isInShowroom(player.getBukkitPlayer())) return false;
-        for (CosmeticType<?> type : CosmeticType.enabledOf(category)) {
+        for(Category cat: Category.values()) {
+        for (CosmeticType<?> type : CosmeticType.enabledOf(cat)) {
             if (!player.canEquip(type)) {
                 return true;
             }
-        }
+        }}
         return false;
     }
 }

@@ -18,13 +18,14 @@ public class MoneyLoot implements Loot {
     public LootReward giveToPlayer(UltraPlayer player, TreasureChest chest) {
         int min = SettingsManager.getConfig().getInt("TreasureChests.Loots.Money.Min");
         int max = SettingsManager.getConfig().getInt("TreasureChests.Loots.Money.Max");
-        int money = randomInRange(min, max);
+        int money = randomInRange(min, max)*chest.getType().getMultiplier();
 
         UCMoneyRewardEvent event = new UCMoneyRewardEvent(player, chest, this, money);
         Bukkit.getPluginManager().callEvent(event);
         money = event.getMoney();
 
-        UltraCosmeticsData.get().getPlugin().getEconomyHandler().getHook().deposit(player.getBukkitPlayer(), money);
+        UltraCosmeticsData.get().getPlugin().getMySqlConnectionManager().getPlayerData().addCoins(player.getUUID(),money);
+
         // Spawn a firework if the player got more than 3/4 of the money they could have.
         boolean firework = money > 3 * SettingsManager.getConfig().getInt("TreasureChests.Loots.Money.Max") / 4;
         boolean toOthers = SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Money.Message.enabled");

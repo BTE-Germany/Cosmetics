@@ -50,6 +50,12 @@ public class SubCommandMenu extends SubCommand {
 
         String s = args[1].toLowerCase();
 
+
+        if(s.startsWith("sp")) {
+            menus.getSpecialsMenu().open(ultraPlayer);
+            return;
+        }
+
         if (s.startsWith("ma")) {
             menus.openMainMenu(ultraPlayer);
             return;

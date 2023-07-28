@@ -21,6 +21,9 @@ commands:
     aliases: [ uc, cosmetics ]
     description: Main Command of Ultra Cosmetics
     usage: /ultracosmetics
+  shop:
+    description: Shop Interface
+    usage: /shop
 permissions:
   ultracosmetics.openmenu:
     default: true

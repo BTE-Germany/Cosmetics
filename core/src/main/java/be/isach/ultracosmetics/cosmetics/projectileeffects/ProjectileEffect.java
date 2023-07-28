@@ -25,7 +25,7 @@ public abstract class ProjectileEffect extends Cosmetic<ProjectileEffectType> im
     private Set<EntityType> types = new HashSet<>();
 
     public ProjectileEffect(UltraPlayer owner, ProjectileEffectType type, UltraCosmetics ultraCosmetics) {
-        super(owner, type, ultraCosmetics);
+        super(owner, type, ultraCosmetics,false);
         for (String entity : SettingsManager.getConfig().getStringList("Projectile-Types")) {
             try {
                 types.add(EntityType.valueOf(entity.toUpperCase()));

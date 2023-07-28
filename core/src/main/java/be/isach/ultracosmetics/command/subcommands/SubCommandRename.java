@@ -44,8 +44,7 @@ public class SubCommandRename extends SubCommand {
             newName = sj.toString();
         }
 
-        if (!newName.isEmpty() && ultraCosmetics.getEconomyHandler().isUsingEconomy()
-                && SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled")) {
+        if (!newName.isEmpty()) {
             player.openInventory(RenamePetButton.buyRenamePet(up, newName, null));
         } else {
             up.setPetName(up.getCurrentPet().getType(), newName);

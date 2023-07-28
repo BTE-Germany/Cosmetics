@@ -126,26 +126,30 @@ public abstract class CosmeticButton implements Button {
                 return true;
             }
 
-            ItemStack display = ItemFactory.rename(cosmeticType.getItemStack(), itemName);
-            PurchaseData pd = new PurchaseData();
-            pd.setPrice(price);
-            pd.setShowcaseItem(display);
-            pd.setOnPurchase(() -> {
-                pm.setPermission(ultraPlayer, cosmeticType);
-                // Delay by five ticks so the command processes
-                // TODO: Remove this?
-                Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> {
-                    cosmeticType.equip(ultraPlayer, ultraCosmetics);
-                    data.getMenu().refresh(ultraPlayer);
-                }, 5);
-            });
-            pd.setOnCancel(() -> data.getMenu().refresh(ultraPlayer));
-            Component title = MessageManager.getMessage("Menu.Purchase-Cosmetic.Title",
-                    Placeholder.component("cosmetic", cosmeticType.getName())
-            );
-            MenuPurchase mp = new MenuPurchase(ultraCosmetics, title, pd);
-            ultraPlayer.getBukkitPlayer().openInventory(mp.getInventory(ultraPlayer));
-            return false; // We just opened another inventory, don't close it
+            // BUYING
+
+            if(ultraPlayer.isInShop()) {
+                ItemStack display = ItemFactory.rename(cosmeticType.getItemStack(), itemName);
+                PurchaseData pd = new PurchaseData();
+                pd.setPrice(price);
+                pd.setShowcaseItem(display);
+                pd.setOnPurchase(() -> {
+                    pm.setPermission(ultraPlayer, cosmeticType);
+                    // Delay by five ticks so the command processes
+                    // TODO: Remove this?
+                    Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> {
+                        cosmeticType.equip(ultraPlayer, ultraCosmetics);
+                        data.getMenu().refresh(ultraPlayer);
+                    }, 5);
+                });
+                pd.setOnCancel(() -> data.getMenu().refresh(ultraPlayer));
+                Component title = MessageManager.getMessage("Menu.Purchase-Cosmetic.Title",
+                        Placeholder.component("cosmetic", cosmeticType.getName())
+                );
+                MenuPurchase mp = new MenuPurchase(ultraCosmetics, title, pd);
+                ultraPlayer.getBukkitPlayer().openInventory(mp.getInventory(ultraPlayer));
+                return false; // We just opened another inventory, don't close it
+            }
         } else if (startsWithColorless(clicked.getItemMeta().getDisplayName(), cosmeticType.getCategory().getDeactivateTooltip())) {
             ultraPlayer.removeCosmetic(cosmeticType.getCategory());
             if (!UltraCosmeticsData.get().shouldCloseAfterSelect()) {

@@ -5,14 +5,7 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.menu.Button;
 import be.isach.ultracosmetics.menu.Menu;
-import be.isach.ultracosmetics.menu.buttons.ClearCosmeticButton;
-import be.isach.ultracosmetics.menu.buttons.CommandButton;
-import be.isach.ultracosmetics.menu.buttons.KeysButton;
-import be.isach.ultracosmetics.menu.buttons.OpenChestButton;
-import be.isach.ultracosmetics.menu.buttons.OpenCosmeticMenuButton;
-import be.isach.ultracosmetics.menu.buttons.RenamePetButton;
-import be.isach.ultracosmetics.menu.buttons.ToggleGadgetsButton;
-import be.isach.ultracosmetics.menu.buttons.ToggleMorphSelfViewButton;
+import be.isach.ultracosmetics.menu.buttons.*;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.SmartLogger;
 import net.kyori.adventure.text.Component;
@@ -60,7 +53,7 @@ public class CustomMainMenu extends Menu {
                 ultraCosmetics.getSmartLogger().write(SmartLogger.LogLevel.WARNING, "Slot index out of range 0-" + getSize() + ": " + slot);
                 continue;
             }
-            Button button;
+            Button button = null;
             ConfigurationSection section = slots.getConfigurationSection(key);
             String typeName = section.getString("Type", "");
             // Item, ClearCosmetic, Keys, OpenChest, OpenCosmeticMenu, RenamePet, ToggleGadgets, ToggleMorphSelfView
@@ -87,6 +80,9 @@ public class CustomMainMenu extends Menu {
                     Category target;
                     if (targetName.equalsIgnoreCase("suits")) {
                         target = Category.SUITS_HELMET;
+                    } else if (targetName.equalsIgnoreCase("special")) {
+                        button = new OpenSpecialsMenuButton(ultraCosmetics);
+                        target = Category.PETS;
                     } else {
                         target = Category.fromString(targetName);
                     }
@@ -94,7 +90,7 @@ public class CustomMainMenu extends Menu {
                         ultraCosmetics.getSmartLogger().write(SmartLogger.LogLevel.WARNING, "Unknown target menu: " + targetName);
                         continue;
                     }
-                    button = new OpenCosmeticMenuButton(ultraCosmetics, target);
+                    if(button == null) button = new OpenCosmeticMenuButton(ultraCosmetics, target);
                     break;
                 case "renamepet":
                     button = new RenamePetButton(ultraCosmetics);

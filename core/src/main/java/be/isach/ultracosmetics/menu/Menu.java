@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.menu;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -13,14 +14,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -104,6 +109,28 @@ public abstract class Menu implements Listener {
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
+
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent event) {
+        if (!(event.getPlayer() instanceof Player)) {
+            return;
+        }
+
+        // Check that Inventory is valid.
+        if (!clickRunnableMap.containsKey(event.getInventory())) {
+            return;
+        }
+        Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> {
+            if(Objects.requireNonNull(event.getPlayer().getOpenInventory().getItem(0)).getType() == Material.GRAY_STAINED_GLASS_PANE) {
+                return;
+            }
+
+            UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) event.getPlayer()).setInShop(false);
+        },20L);
+
+
+    }
+
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {

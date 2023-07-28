@@ -63,8 +63,7 @@ public class RenamePetButton implements Button {
                     if (text.length() > MySqlConnectionManager.MAX_NAME_SIZE) {
                         return Collections.singletonList(AnvilGUI.ResponseAction.replaceInputText(MessageManager.getLegacyMessage("Too-Long")));
                     }
-                    if (!text.isEmpty() && ultraCosmetics.getEconomyHandler().isUsingEconomy()
-                            && SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled")) {
+                    if (!text.isEmpty()) {
                         return Collections.singletonList(AnvilGUI.ResponseAction.openInventory(buyRenamePet(ultraPlayer, text, returnMenu)));
                     } else {
                         ultraPlayer.setPetName(ultraPlayer.getCurrentPet().getType(), text);

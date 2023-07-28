@@ -27,6 +27,7 @@ public class PlayerDataTable extends Table {
         tableInfo.add(new Column<>("treasureNotifications", "BOOLEAN NOT NULL DEFAULT 0", Boolean.class));
         tableInfo.add(new Column<>("filterByOwned", "BOOLEAN NOT NULL DEFAULT 0", Boolean.class));
         tableInfo.add(new Column<>("treasureKeys", "INTEGER NOT NULL DEFAULT 0", Integer.class));
+        tableInfo.add(new Column<>("coins", "INTEGER NOT NULL DEFAULT 0", Integer.class));
     }
 
     public void addPlayer(UUID uuid) {
@@ -68,5 +69,19 @@ public class PlayerDataTable extends Table {
 
     public void setKeys(UUID uuid, int keys) {
         update().uuid(uuid).set("treasureKeys", keys).execute();
+    }
+
+
+    public int getCoins(UUID uuid) {
+        return select("coins").uuid(uuid).asInt();
+    }
+
+    public void setCoins(UUID uuid, int keys) {
+        update().uuid(uuid).set("coins", keys).execute();
+    }
+
+    public void addCoins(UUID uuid, int coins) {
+        int current = getCoins(uuid);
+        setCoins(uuid, current + coins);
     }
 }

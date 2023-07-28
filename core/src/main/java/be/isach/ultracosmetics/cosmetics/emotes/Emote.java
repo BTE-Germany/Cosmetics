@@ -18,7 +18,7 @@ public class Emote extends ArmorCosmetic<EmoteType> {
     private final EmoteAnimation animation;
 
     public Emote(UltraPlayer owner, EmoteType emoteType, UltraCosmetics ultraCosmetics) {
-        super(owner, emoteType, ultraCosmetics);
+        super(owner, emoteType, ultraCosmetics,false);
 
         this.animation = new EmoteAnimation(getType().getTicksPerFrame(), this);
     }

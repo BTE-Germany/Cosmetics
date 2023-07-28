@@ -36,8 +36,9 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
     protected final T cosmeticType;
     private final UUID ownerUniqueId;
     private final Component typeName;
+    private final boolean special;
 
-    public Cosmetic(UltraPlayer owner, T type, UltraCosmetics ultraCosmetics) {
+    public Cosmetic(UltraPlayer owner, T type, UltraCosmetics ultraCosmetics,boolean special) {
         if (owner == null || owner.getBukkitPlayer() == null) {
             throw new IllegalArgumentException("Invalid UltraPlayer.");
         }
@@ -47,6 +48,7 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
         this.ultraCosmetics = ultraCosmetics;
         this.cosmeticType = type;
         this.typeName = type.getName();
+        this.special = special;
     }
 
     public final void equip() {
@@ -196,5 +198,9 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
 
     protected String getOptionPath(String key) {
         return cosmeticType.getConfigPath() + "." + key;
+    }
+
+    public final boolean isSpecial() {
+        return special;
     }
 }

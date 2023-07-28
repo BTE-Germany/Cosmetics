@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.menu.menus;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.menu.Menu;
 import be.isach.ultracosmetics.menu.PurchaseData;
 import be.isach.ultracosmetics.menu.buttons.PurchaseCancelButton;
@@ -49,6 +50,13 @@ public class MenuPurchase extends Menu {
     @Override
     protected int getSize() {
         return 54;
+    }
+
+    @Override
+    protected Component getName(UltraPlayer player) {
+        if(player.isInShop()) return MessageManager.getMiniMessage().deserialize("<bold>Shop - ").append(getName());
+
+        return getName();
     }
 
     @Override

@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.menu.buttons;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.type.SuitCategory;
 import be.isach.ultracosmetics.menu.Button;
 import be.isach.ultracosmetics.menu.ClickData;
@@ -16,9 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class OpenCosmeticMenuButton implements Button {
     private final Category category;
@@ -49,19 +48,20 @@ public class OpenCosmeticMenuButton implements Button {
     }
 
     private String calculateUnlocked(Player player) {
-        int unlocked = 0;
+        Set<CosmeticType<?>> unlocked = new HashSet<>();
         int total;
         if (category.isSuits()) {
             for (Category cat : Category.enabled()) {
                 if (!cat.isSuits()) continue;
-                unlocked += pm.getEnabledUnlocked(player, cat).size();
+                unlocked.addAll(pm.getEnabledUnlocked(player, cat));
             }
             total = SuitCategory.enabled().size() * 4;
         } else {
-            unlocked = pm.getEnabledUnlocked(player, category).size();
+            unlocked = pm.getEnabledUnlocked(player, category);
             total = category.getEnabled().size();
+            System.out.println(category+" "+unlocked+" "+total);
         }
-        return unlocked + "/" + total;
+        return unlocked.size() + "/" + total;
     }
 
     @Override

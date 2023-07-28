@@ -74,7 +74,7 @@ public abstract class Menu implements Listener {
     }
 
     public Inventory getInventory(UltraPlayer player) {
-        Inventory inventory = createInventory(getName());
+        Inventory inventory = createInventory(getName(player));
         putItems(inventory, player);
         fillInventory(inventory);
         return inventory;
@@ -180,5 +180,6 @@ public abstract class Menu implements Listener {
 
     protected abstract int getSize();
 
+    protected abstract Component getName(UltraPlayer player);
     protected abstract Component getName();
 }

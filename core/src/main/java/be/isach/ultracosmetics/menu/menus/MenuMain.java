@@ -100,7 +100,12 @@ public class MenuMain extends Menu {
     protected Component getName() {
         return title;
     }
+    @Override
+    protected Component getName(UltraPlayer player) {
+        if(player.isInShop()) return MessageManager.getMiniMessage().deserialize("<bold>Shop - ").append(getName());
 
+        return getName();
+    }
     @Override
     protected int getSize() {
         return UltraCosmeticsData.get().areTreasureChestsEnabled() ? 54 : 45;

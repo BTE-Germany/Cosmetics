@@ -29,19 +29,13 @@ public class ProfilePermissions implements CosmeticPermissionGetter, CosmeticPer
 
     @Override
     public boolean hasPermission(Player player, CosmeticType<?> type) {
+        System.out.println("dd "+pm.getUltraPlayer(player).getProfile().hasUnlocked(type));
         return pm.getUltraPlayer(player).getProfile().hasUnlocked(type);
     }
 
     @Override
     public Set<CosmeticType<?>> getEnabledUnlocked(Player player) {
         return pm.getUltraPlayer(player).getProfile().getAllUnlocked();
-    }
-
-    @Override
-    public Set<CosmeticType<?>> getEnabledUnlocked(Player player, Category cat) {
-        Set<CosmeticType<?>> types = new HashSet<>();
-        pm.getUltraPlayer(player).getProfile().getAllUnlocked().stream().filter(t -> t.getCategory() == cat).forEach(types::add);
-        return types;
     }
 
     @Override

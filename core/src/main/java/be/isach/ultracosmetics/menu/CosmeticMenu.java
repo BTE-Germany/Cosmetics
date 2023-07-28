@@ -75,7 +75,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
         }
         lastUsedPages.put(player.getUUID(), page);
 
-        Inventory inventory = createInventory(maxPages == 1 ? getName() : getName(page, player));
+        Inventory inventory = createInventory(maxPages == 1 ? getName(player) : getName(page, player));
         boolean hasUnlockable = hasUnlockable(player);
 
         // Cosmetic types.
@@ -151,7 +151,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
      * @return The name of the menu with page detailed.
      */
     protected Component getName(int page, UltraPlayer ultraPlayer) {
-        return Component.empty().append(getName()).appendSpace()
+        return Component.empty().append(getName(ultraPlayer)).appendSpace()
                 .append(Component.text("(" + page + "/" + getMaxPages(ultraPlayer) + ")", NamedTextColor.GRAY, TextDecoration.ITALIC));
     }
 
@@ -169,6 +169,13 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
     /**
      * @return The name of the menu.
      */
+    @Override
+    protected Component getName(UltraPlayer player) {
+        if(player.isInShop()) return MessageManager.getMiniMessage().deserialize("<bold>Shop - ").append(getName());
+
+        return getName();
+    }
+
     @Override
     protected Component getName() {
         return MessageManager.getMessage("Menu." + category.getConfigPath() + ".Title");

@@ -151,10 +151,16 @@ public class MenuSpecial extends Menu {
      * @return The name of the menu.
      */
     @Override
+    protected Component getName(UltraPlayer player) {
+        if(player.isInShop()) return MessageManager.getMiniMessage().deserialize("<bold>Shop - ").append(getName());
+
+        return getName();
+    }
+
+    @Override
     protected Component getName() {
         return MessageManager.getMessage("Menu.Special.Title");
     }
-
 
     /**
      * Puts items in the inventory.
@@ -187,14 +193,7 @@ public class MenuSpecial extends Menu {
 
 
     protected boolean shouldHideItem(UltraPlayer player, CosmeticType<?> cosmeticType) {
-
-        if (!player.canEquip(cosmeticType) && !cosmeticType.isSpecial()) {
-            return false;
-        }
-        if(!cosmeticType.isSpecial() ) return true;
-        return cosmeticType instanceof CosmeticEntType
-                && ((CosmeticEntType<?>) cosmeticType).isMonster()
-                && player.getBukkitPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL;
+      return cosmeticType.isSpecial() && player.canEquip(cosmeticType);
     }
 
     protected boolean hasUnlockable(UltraPlayer player) {

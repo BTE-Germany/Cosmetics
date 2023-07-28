@@ -63,7 +63,7 @@ public class HatType extends CosmeticType<Hat> {
         new HatType("bc2b9b9ae622bd68adff7180f8206ec4494abbfa130e94a584ec692e8984ab2", "Surprised",false);
         new HatType("b371e4e1cf6a1a36fdae27137fd9b8748e6169299925f9af2be301e54298c73", "Dead",false);
         new HatType("1f1b875de49c587e3b4023ce24d472ff27583a1f054f37e73a1154b5b5498", "Crying",false);
-        new HatType("5059d59eb4e59c31eecf9ece2f9cf3934e45c0ec476fc86bfaef8ea913ea710", "BigSmile",false);
+        new HatType("5059d59eb4e59c31eecf9ece2f9cf3934e45c0ec476fc86bfaef8ea913ea710", "BigSmile",true);
         new HatType("f4ea2d6f939fefeff5d122e63dd26fa8a427df90b2928bc1fa89a8252a7e", "Wink",false);
         new HatType("3baabe724eae59c5d13f442c7dc5d2b1c6b70c2f83364a488ce5973ae80b4c3", "Derp",false);
         new HatType("52e98165deef4ed621953921c1ef817dc638af71c1934a4287b69d7a31f6b8", "Smile",false);

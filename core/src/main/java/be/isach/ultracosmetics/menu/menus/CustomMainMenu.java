@@ -118,6 +118,12 @@ public class CustomMainMenu extends Menu {
     protected Component getName() {
         return title;
     }
+    @Override
+    protected Component getName(UltraPlayer player) {
+        if(player.isInShop()) return MessageManager.getMiniMessage().deserialize("<bold>Shop - ").append(getName());
+
+        return getName();
+    }
 
     public static File getFile(UltraCosmetics ultraCosmetics) {
         return new File(ultraCosmetics.getDataFolder(), "custom_main_menu.yml");

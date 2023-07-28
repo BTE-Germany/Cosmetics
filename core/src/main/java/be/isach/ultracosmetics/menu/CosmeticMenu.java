@@ -206,6 +206,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
 
     protected boolean shouldHideItem(UltraPlayer player, CosmeticType<?> cosmeticType) {
         if(player.isInShop()) {
+            if(cosmeticType.isSpecial()) return true;
             return player.canEquip(cosmeticType);
 
         } else {

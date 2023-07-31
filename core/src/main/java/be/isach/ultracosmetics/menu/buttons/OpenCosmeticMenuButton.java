@@ -59,7 +59,6 @@ public class OpenCosmeticMenuButton implements Button {
         } else {
             unlocked = pm.getEnabledUnlocked(player, category);
             total = category.getEnabled().size();
-            System.out.println(category+" "+unlocked+" "+total);
         }
         return unlocked.size() + "/" + total;
     }

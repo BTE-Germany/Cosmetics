@@ -61,7 +61,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onJoin(final PlayerJoinEvent event) {
         UltraPlayer ultraPlayer = pm.getUltraPlayer(event.getPlayer());
-        if (menuItemEnabled && event.getPlayer().hasPermission("ultracosmetics.receivechest") && SettingsManager.isAllowedWorld(event.getPlayer().getWorld())) {
+        if (event.getPlayer().hasPermission("ultracosmetics.receivechest") && SettingsManager.isAllowedWorld(event.getPlayer().getWorld())) {
             ultraPlayer.giveMenuItem();
         }
 
